@@ -146,7 +146,7 @@ app.showTable = function(tableName) {
     console.log('Showing table:', tableName);
     
     // Hide all table sections
-    document.querySelectorAll('.table-section').forEach(section => {
+    document.querySelectorAll('.section-container').forEach(section => {
         section.classList.add('hidden');
     });
     
@@ -223,14 +223,17 @@ app.searchPlayers = function(name) {
         });
 };
 
-// Display players in table
+// Display players in table and card view
 app.displayPlayers = function(players) {
     const tableBody = document.getElementById('player-table-body');
-    if (!tableBody) {
-        console.error('Player table body not found');
+    const cardContainer = document.getElementById('player-card-container');
+    
+    if (!tableBody || !cardContainer) {
+        console.error('Player table body or card container not found');
         return;
     }
     
+    // Handle table view
     let rowsHTML = '';
     
     if (players && players.length > 0) {
@@ -253,6 +256,44 @@ app.displayPlayers = function(players) {
     }
     
     tableBody.innerHTML = rowsHTML;
+    
+    // Handle card view
+    let cardsHTML = '';
+    
+    if (players && players.length > 0) {
+        players.forEach(player => {
+            cardsHTML += `
+                <div class="data-card" data-id="${player.player_id}">
+                    <div class="data-card-header">
+                        ${player.first_name} ${player.last_name}
+                    </div>
+                    <div class="data-card-body">
+                        <div class="data-card-field">
+                            <span class="data-card-label">Age</span>
+                            <span class="data-card-value">${player.age || ''}</span>
+                        </div>
+                        <div class="data-card-field">
+                            <span class="data-card-label">Team ID</span>
+                            <span class="data-card-value">${player.team_id || ''}</span>
+                        </div>
+                    </div>
+                    <div class="data-card-actions">
+                        <button class="pure-button edit-btn" onclick="app.editPlayer(${player.player_id})">Edit</button>
+                        <button class="pure-button delete-btn" onclick="app.deletePlayer(${player.player_id})">Delete</button>
+                    </div>
+                </div>
+            `;
+        });
+    } else {
+        cardsHTML = `
+            <div class="empty-grid">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <p>No players found</p>
+            </div>
+        `;
+    }
+    
+    cardContainer.innerHTML = cardsHTML;
 };
 
 // Create a new player
@@ -367,11 +408,14 @@ app.loadAllTeams = function() {
         });
 };
 
-// Display teams in table
+// Display teams in table and card view
 app.displayTeams = function(teams) {
     const tableBody = document.getElementById('team-table-body');
-    if (!tableBody) return;
+    const cardContainer = document.getElementById('team-card-container');
     
+    if (!tableBody || !cardContainer) return;
+    
+    // Handle table view
     let rowsHTML = '';
     
     if (teams && teams.length > 0) {
@@ -393,6 +437,48 @@ app.displayTeams = function(teams) {
     }
     
     tableBody.innerHTML = rowsHTML;
+    
+    // Handle card view
+    let cardsHTML = '';
+    
+    if (teams && teams.length > 0) {
+        teams.forEach(team => {
+            const colors = (team.team_colors && Array.isArray(team.team_colors)) 
+                ? team.team_colors.join(', ') 
+                : '';
+            
+            cardsHTML += `
+                <div class="data-card" data-id="${team.team_id}">
+                    <div class="data-card-header">
+                        ${team.team_name || 'Team'}
+                    </div>
+                    <div class="data-card-body">
+                        <div class="data-card-field">
+                            <span class="data-card-label">Team ID</span>
+                            <span class="data-card-value">${team.team_id || ''}</span>
+                        </div>
+                        <div class="data-card-field">
+                            <span class="data-card-label">Team Colors</span>
+                            <span class="data-card-value">${colors}</span>
+                        </div>
+                    </div>
+                    <div class="data-card-actions">
+                        <button class="pure-button edit-btn" onclick="app.editTeam(${team.team_id})">Edit</button>
+                        <button class="pure-button delete-btn" onclick="app.deleteTeam(${team.team_id})">Delete</button>
+                    </div>
+                </div>
+            `;
+        });
+    } else {
+        cardsHTML = `
+            <div class="empty-grid">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <p>No teams found</p>
+            </div>
+        `;
+    }
+    
+    cardContainer.innerHTML = cardsHTML;
 };
 
 // Create a new team
@@ -518,11 +604,14 @@ app.loadAllCoaches = function() {
         });
 };
 
-// Display coaches in table
+// Display coaches in table and card view
 app.displayCoaches = function(coaches) {
     const tableBody = document.getElementById('coach-table-body');
-    if (!tableBody) return;
+    const cardContainer = document.getElementById('coach-card-container');
     
+    if (!tableBody || !cardContainer) return;
+    
+    // Handle table view
     let rowsHTML = '';
     
     if (coaches && coaches.length > 0) {
@@ -542,6 +631,44 @@ app.displayCoaches = function(coaches) {
     }
     
     tableBody.innerHTML = rowsHTML;
+    
+    // Handle card view
+    let cardsHTML = '';
+    
+    if (coaches && coaches.length > 0) {
+        coaches.forEach(coach => {
+            cardsHTML += `
+                <div class="data-card" data-id="${coach.coach_id}">
+                    <div class="data-card-header">
+                        ${coach.first_name} ${coach.last_name}
+                    </div>
+                    <div class="data-card-body">
+                        <div class="data-card-field">
+                            <span class="data-card-label">Coach ID</span>
+                            <span class="data-card-value">${coach.coach_id || ''}</span>
+                        </div>
+                        <div class="data-card-field">
+                            <span class="data-card-label">Phone</span>
+                            <span class="data-card-value">${coach.home_phone || ''}</span>
+                        </div>
+                        <div class="data-card-field">
+                            <span class="data-card-label">Team ID</span>
+                            <span class="data-card-value">${coach.team_id || ''}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    } else {
+        cardsHTML = `
+            <div class="empty-grid">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <p>No coaches found</p>
+            </div>
+        `;
+    }
+    
+    cardContainer.innerHTML = cardsHTML;
 };
 
 // PARENT TABLE FUNCTIONS
@@ -556,11 +683,14 @@ app.loadAllParents = function() {
         });
 };
 
-// Display parents in table
+// Display parents in table and card view
 app.displayParents = function(parents) {
     const tableBody = document.getElementById('parent-table-body');
-    if (!tableBody) return;
+    const cardContainer = document.getElementById('parent-card-container');
     
+    if (!tableBody || !cardContainer) return;
+    
+    // Handle table view
     let rowsHTML = '';
     
     if (parents && parents.length > 0) {
@@ -587,6 +717,51 @@ app.displayParents = function(parents) {
     }
     
     tableBody.innerHTML = rowsHTML;
+    
+    // Handle card view
+    let cardsHTML = '';
+    
+    if (parents && parents.length > 0) {
+        parents.forEach(parent => {
+            const address = [
+                parent.street, 
+                parent.city, 
+                parent.state, 
+                parent.zip_code
+            ].filter(Boolean).join(', ');
+            
+            cardsHTML += `
+                <div class="data-card" data-id="${parent.parent_id}">
+                    <div class="data-card-header">
+                        ${parent.first_name} ${parent.last_name}
+                    </div>
+                    <div class="data-card-body">
+                        <div class="data-card-field">
+                            <span class="data-card-label">Parent ID</span>
+                            <span class="data-card-value">${parent.parent_id || ''}</span>
+                        </div>
+                        <div class="data-card-field">
+                            <span class="data-card-label">Phone</span>
+                            <span class="data-card-value">${parent.home_phone || ''}</span>
+                        </div>
+                        <div class="data-card-field">
+                            <span class="data-card-label">Address</span>
+                            <span class="data-card-value">${address || ''}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    } else {
+        cardsHTML = `
+            <div class="empty-grid">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <p>No parents found</p>
+            </div>
+        `;
+    }
+    
+    cardContainer.innerHTML = cardsHTML;
 };
 
 // PLAYER-PARENT TABLE FUNCTIONS
@@ -601,11 +776,14 @@ app.loadAllPlayerParents = function() {
         });
 };
 
-// Display player-parent relationships
+// Display player-parent relationships in table and card view
 app.displayPlayerParents = function(relationships) {
     const tableBody = document.getElementById('player-parent-table-body');
-    if (!tableBody) return;
+    const cardContainer = document.getElementById('player-parent-card-container');
     
+    if (!tableBody || !cardContainer) return;
+    
+    // Handle table view
     let rowsHTML = '';
     
     if (relationships && relationships.length > 0) {
@@ -623,6 +801,70 @@ app.displayPlayerParents = function(relationships) {
     }
     
     tableBody.innerHTML = rowsHTML;
+    
+    // Handle card view
+    let cardsHTML = '';
+    
+    if (relationships && relationships.length > 0) {
+        relationships.forEach(relation => {
+            cardsHTML += `
+                <div class="data-card">
+                    <div class="data-card-header">
+                        ${relation.relationship_type || 'Relationship'}
+                    </div>
+                    <div class="data-card-body">
+                        <div class="data-card-field">
+                            <span class="data-card-label">Player ID</span>
+                            <span class="data-card-value">${relation.player_id || ''}</span>
+                        </div>
+                        <div class="data-card-field">
+                            <span class="data-card-label">Parent ID</span>
+                            <span class="data-card-value">${relation.parent_id || ''}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    } else {
+        cardsHTML = `
+            <div class="empty-grid">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <p>No relationships found</p>
+            </div>
+        `;
+    }
+    
+    cardContainer.innerHTML = cardsHTML;
+};
+
+// Set up view toggle for a section
+app.setupViewToggle = function(sectionName) {
+    const tableViewBtn = document.getElementById(`${sectionName}-table-view`);
+    const cardViewBtn = document.getElementById(`${sectionName}-card-view`);
+    const tableContainer = document.getElementById(`${sectionName}-table-container`);
+    const cardContainer = document.getElementById(`${sectionName}-card-container`);
+    
+    if (!tableViewBtn || !cardViewBtn || !tableContainer || !cardContainer) return;
+    
+    tableViewBtn.addEventListener('click', function() {
+        // Update buttons
+        tableViewBtn.classList.add('active');
+        cardViewBtn.classList.remove('active');
+        
+        // Update view
+        tableContainer.classList.remove('hidden');
+        cardContainer.classList.add('hidden');
+    });
+    
+    cardViewBtn.addEventListener('click', function() {
+        // Update buttons
+        cardViewBtn.classList.add('active');
+        tableViewBtn.classList.remove('active');
+        
+        // Update view
+        cardContainer.classList.remove('hidden');
+        tableContainer.classList.add('hidden');
+    });
 };
 
 // Set up event listeners when the DOM is fully loaded
@@ -641,6 +883,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // Set up view toggles for each section
+    app.setupViewToggle('player');
+    app.setupViewToggle('team');
+    app.setupViewToggle('coach');
+    app.setupViewToggle('parent');
+    app.setupViewToggle('relationship');
+    
     // Player search form
     const playerSearchForm = document.getElementById('player-search-form');
     if (playerSearchForm) {
@@ -648,6 +897,51 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             const searchInput = document.getElementById('player-input');
             app.searchPlayers(searchInput.value);
+        });
+    }
+    
+    // Show All Players button
+    const loadAllPlayersBtn = document.getElementById('load-all-players');
+    if (loadAllPlayersBtn) {
+        loadAllPlayersBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            app.loadAllPlayers();
+        });
+    }
+    
+    // Show All Teams button
+    const loadAllTeamsBtn = document.getElementById('load-all-teams');
+    if (loadAllTeamsBtn) {
+        loadAllTeamsBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            app.loadAllTeams();
+        });
+    }
+    
+    // Show All Coaches button
+    const loadAllCoachesBtn = document.getElementById('load-all-coaches');
+    if (loadAllCoachesBtn) {
+        loadAllCoachesBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            app.loadAllCoaches();
+        });
+    }
+    
+    // Show All Parents button
+    const loadAllParentsBtn = document.getElementById('load-all-parents');
+    if (loadAllParentsBtn) {
+        loadAllParentsBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            app.loadAllParents();
+        });
+    }
+    
+    // Show All Player-Parent Relationships button
+    const loadAllPlayerParentsBtn = document.getElementById('load-all-player-parents');
+    if (loadAllPlayerParentsBtn) {
+        loadAllPlayerParentsBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            app.loadAllPlayerParents();
         });
     }
     
