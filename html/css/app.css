@@ -1,3 +1,240 @@
 body {
     margin-bottom: 40px;
+    font-family: sans-serif;
+}
+
+.table-section {
+    margin: 20px 0;
+    padding: 10px 0;
+    border-top: 1px solid #eee;
+}
+
+.table-section h2 {
+    margin-top: 10px;
+    color: #333;
+}
+
+.pure-menu-selected .pure-menu-link {
+    background-color: #0078e7;
+    color: white;
+}
+
+.pure-menu-horizontal {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.pure-table {
+    margin-top: 15px;
+    width: 100%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.hidden {
+    display: none !important;
+}
+
+button.pure-button-primary {
+    margin-bottom: 10px;
+    margin-right: 5px;
+}
+
+.action-buttons {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.action-buttons form {
+    margin-right: 15px;
+    margin-bottom: 0;
+}
+
+.status-message {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 3px;
+    transition: opacity 0.5s ease-in-out;
+    opacity: 0;
+}
+
+.status-message.error {
+    background-color: #ffdddd;
+    border-left: 5px solid #f44336;
+    color: #444;
+    opacity: 1;
+}
+
+.status-message.success {
+    background-color: #ddffdd;
+    border-left: 5px solid #4CAF50;
+    color: #444;
+    opacity: 1;
+}
+
+.status-message.loading {
+    background-color: #e6f7ff;
+    border-left: 5px solid #2196F3;
+    color: #444;
+    opacity: 1;
+}
+
+/* Add simple loading animation */
+.loading-row td {
+    text-align: center;
+    padding: 15px;
+    color: #666;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+.loading-indicator {
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.api-info {
+    margin-bottom: 15px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+#api-status {
+    font-weight: bold;
+}
+
+#api-status.online {
+    color: #4CAF50;
+}
+
+#api-status.offline {
+    color: #f44336;
+}
+
+/* Additional debug help */
+.debug-info {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px 0;
+    font-family: monospace;
+    font-size: 12px;
+    max-height: 100px;
+    overflow: auto;
+    display: none;
+}
+
+.debug-info.visible {
+    display: block;
+}
+
+/* CRUD Table Styles */
+.actions {
+    width: 150px;
+    text-align: center;
+}
+
+.edit-btn {
+    background-color: #ffb74d;
+    color: #fff;
+}
+
+.delete-btn {
+    background-color: #e57373;
+    color: #fff;
+    margin-left: 5px;
+}
+
+.add-new-btn {
+    margin-bottom: 15px;
+    background-color: #81c784;
+    color: #fff;
+}
+
+/* Form Container Styles */
+.form-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.form-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.form-header h3 {
+    margin: 0;
+}
+
+.form-close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input, 
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.form-footer button {
+    margin-left: 10px;
+}
+
+/* Responsive tables */
+@media screen and (max-width: 768px) {
+    .pure-table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    .form-content {
+        width: 90%;
+    }
 }

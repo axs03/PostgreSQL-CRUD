@@ -9,9 +9,6 @@
     <link rel="stylesheet" href="css/pure-min.css">
     <link rel="stylesheet" href="css/app.css">
 
-    <!-- javascript -->
-    <script src="js/app.js"></script>
-
     <title>Youth League Database</title>
 </head>
 <body>
@@ -19,25 +16,248 @@
         <div class="pure-u-1-8"></div>
         <div class="pure-u-3-4">
             <h1>Youth League Database</h1>
-            <form class="pure-form" onsubmit="event.preventDefault(); app.searchClick()">
-                <fieldset>
-                    <input id="city-input" type="text" placeholder="Search First Name Here" required>
-                    <input type="submit" class="pure-button pure-button-primary" value="Search">
-                </fieldset>
-            </form>
+            
+            <!-- Database Tables Navigation -->
+            <div class="pure-menu pure-menu-horizontal">
+                <ul class="pure-menu-list">
+                    <li id="player-tab" class="pure-menu-item pure-menu-selected"><a href="#" class="pure-menu-link" data-table="player">Players</a></li>
+                    <li id="team-tab" class="pure-menu-item"><a href="#" class="pure-menu-link" data-table="team">Teams</a></li>
+                    <li id="coach-tab" class="pure-menu-item"><a href="#" class="pure-menu-link" data-table="coach">Coaches</a></li>
+                    <li id="parent-tab" class="pure-menu-item"><a href="#" class="pure-menu-link" data-table="parent">Parents</a></li>
+                    <li id="player_parent-tab" class="pure-menu-item"><a href="#" class="pure-menu-link" data-table="player_parent">Player-Parent</a></li>
+                </ul>
+            </div>
+            
+            <!-- API Status -->
+            <div class="api-info">
+                <p>API Status: <span id="api-status">Checking...</span></p>
+            </div>
+            
+            <!-- Player Search Section -->
+            <div id="player-section" class="table-section">
+                <h2>Player Information</h2>
+                <div class="action-buttons">
+                    <form class="pure-form" id="player-search-form">
+                        <fieldset>
+                            <input id="player-input" type="text" placeholder="Search First Name Here">
+                            <button type="submit" class="pure-button pure-button-primary">Search</button>
+                        </fieldset>
+                    </form>
+                    <button id="load-all-players" class="pure-button pure-button-primary">Show All Players</button>
+                </div>
 
-            <table class="pure-table pure-table-bordered pure-table-striped hidden" id="results-table">
-                <thead>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Age</th>
-                    <th>Team ID</th>
-                </thead>
-                <tbody id="results-table-body">
-                </tbody>
-            </table>
+                <button id="new-player-btn" class="pure-button add-new-btn">Add New Player</button>
+                
+                <table class="pure-table pure-table-bordered pure-table-striped" id="player-table">
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Age</th>
+                            <th>Team ID</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="player-table-body">
+                        <tr>
+                            <td colspan="5">Click "Show All Players" to view data</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <!-- Player Form -->
+                <div id="player-form-container" class="form-container hidden">
+                    <div class="form-content">
+                        <div class="form-header">
+                            <h3 id="player-form-title">Add New Player</h3>
+                            <button class="form-close-btn">&times;</button>
+                        </div>
+                        <form id="player-form" class="pure-form pure-form-stacked">
+                            <input type="hidden" id="player-form-id">
+                            
+                            <div class="form-group">
+                                <label for="player-form-first-name">First Name</label>
+                                <input type="text" id="player-form-first-name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="player-form-last-name">Last Name</label>
+                                <input type="text" id="player-form-last-name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="player-form-age">Age</label>
+                                <input type="number" id="player-form-age" min="5" max="18" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="player-form-team-id">Team ID</label>
+                                <input type="number" id="player-form-team-id" required>
+                            </div>
+                            
+                            <div class="form-footer">
+                                <button type="button" id="player-form-cancel" class="pure-button">Cancel</button>
+                                <button type="submit" class="pure-button pure-button-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Team Section -->
+            <div id="team-section" class="table-section hidden">
+                <h2>Team Information</h2>
+                <button id="load-all-teams" class="pure-button pure-button-primary">Show All Teams</button>
+                <button id="new-team-btn" class="pure-button add-new-btn">Add New Team</button>
+                
+                <table class="pure-table pure-table-bordered pure-table-striped" id="team-table">
+                    <thead>
+                        <tr>
+                            <th>Team ID</th>
+                            <th>Team Name</th>
+                            <th>Team Colors</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="team-table-body">
+                        <tr>
+                            <td colspan="4">Click "Show All Teams" to view data</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <!-- Team Form -->
+                <div id="team-form-container" class="form-container hidden">
+                    <div class="form-content">
+                        <div class="form-header">
+                            <h3 id="team-form-title">Add New Team</h3>
+                            <button class="form-close-btn">&times;</button>
+                        </div>
+                        <form id="team-form" class="pure-form pure-form-stacked">
+                            <input type="hidden" id="team-form-id">
+                            
+                            <div class="form-group">
+                                <label for="team-form-name">Team Name</label>
+                                <input type="text" id="team-form-name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="team-form-colors">Team Colors (comma separated)</label>
+                                <input type="text" id="team-form-colors" placeholder="Red, Blue, White">
+                            </div>
+                            
+                            <div class="form-footer">
+                                <button type="button" id="team-form-cancel" class="pure-button">Cancel</button>
+                                <button type="submit" class="pure-button pure-button-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Coach Section -->
+            <div id="coach-section" class="table-section hidden">
+                <h2>Coach Information</h2>
+                <button id="load-all-coaches" class="pure-button pure-button-primary">Show All Coaches</button>
+                <table class="pure-table pure-table-bordered pure-table-striped" id="coach-table">
+                    <thead>
+                        <tr>
+                            <th>Coach ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Phone Number</th>
+                            <th>Team ID</th>
+                        </tr>
+                    </thead>
+                    <tbody id="coach-table-body">
+                        <tr>
+                            <td colspan="5">Click "Show All Coaches" to view data</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Parent Section -->
+            <div id="parent-section" class="table-section hidden">
+                <h2>Parent Information</h2>
+                <button id="load-all-parents" class="pure-button pure-button-primary">Show All Parents</button>
+                <table class="pure-table pure-table-bordered pure-table-striped" id="parent-table">
+                    <thead>
+                        <tr>
+                            <th>Parent ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Phone Number</th>
+                            <th>Address</th>
+                        </tr>
+                    </thead>
+                    <tbody id="parent-table-body">
+                        <tr>
+                            <td colspan="5">Click "Show All Parents" to view data</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Player-Parent Section -->
+            <div id="player_parent-section" class="table-section hidden">
+                <h2>Player-Parent Relationships</h2>
+                <button id="load-all-player-parents" class="pure-button pure-button-primary">Show All Relationships</button>
+                <table class="pure-table pure-table-bordered pure-table-striped" id="player-parent-table">
+                    <thead>
+                        <tr>
+                            <th>Player ID</th>
+                            <th>Parent ID</th>
+                            <th>Relationship Type</th>
+                        </tr>
+                    </thead>
+                    <tbody id="player-parent-table-body">
+                        <tr>
+                            <td colspan="3">Click "Show All Relationships" to view data</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Status indicator -->
+            <div id="status-message" class="status-message"></div>
         </div>
         <div class="pure-u-1-8"></div>
     </div>
+
+    <!-- API Check Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const apiStatus = document.getElementById('api-status');
+            if (apiStatus) {
+                fetch('http://localhost:3000/')
+                    .then(response => {
+                        if (response.ok) {
+                            apiStatus.textContent = 'Online';
+                            apiStatus.className = 'online';
+                            console.log('API is online!');
+                        } else {
+                            apiStatus.textContent = 'Error: ' + response.status;
+                            apiStatus.className = 'offline';
+                            console.error('API returned error:', response.status);
+                        }
+                    })
+                    .catch(error => {
+                        apiStatus.textContent = 'Offline or Inaccessible';
+                        apiStatus.className = 'offline';
+                        console.error('API fetch error:', error);
+                        
+                        const statusMsg = document.getElementById('status-message');
+                        if (statusMsg) {
+                            statusMsg.textContent = 'Cannot connect to API. Make sure the Docker containers are running.';
+                            statusMsg.className = 'status-message error';
+                        }
+                    });
+            }
+        });
+    </script>
+
+    <!-- Load JavaScript at the end -->
+    <script src="js/app.js"></script>
 </body>
 </html>
